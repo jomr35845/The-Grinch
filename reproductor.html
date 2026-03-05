@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Reproductor Secuencial</title>  
+
+<style>  
+body{
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  background:#111;
+  color:white;
+}
+
+div.caja{  
+  width: 90%;  
+  height: 400px;  
+  margin: 40px auto;  
+}  
+
+div.boton{
+  width: 90%;
+  background: blue;
+  margin: 20px auto;
+  text-align: center;
+  color: white;
+  padding:20px 0;
+  font-weight: bold;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+div.boton:hover{
+  background: darkblue;
+}
+
+#info{
+  text-align:center;
+  margin-top:10px;
+}
+</style>
+
+</head>  
+
+<body>  
+
+<div class="caja">  
+    <div id="player"></div>
+</div>  
+
+<div class="boton" id="playBtn">  
+    ▶ Reproducir Todo  
+</div>  
+
+<div id="info">Video: 0 / 52</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+
+// 🔥 LISTA DE 52 VIDEOS (CAMBIA LOS IDs)
+const VIDEOS = [
+"35E59o-C8kw",
+"YYb9lxtwTyQ",
+"Iy46TmEhRqQ",
+"I5PaB_6vf2c",
+"whSGuASewEE",// cc 1
+"9EnMWyxuJtk",
+"KzM_FJGUD7c",
+"3YIWsA4bJ6Y",
+"ovFO5qoxSuA",
+"hNRVYM-Y4_Y", // cc 2
+"0G6aPjiDQ6M",
+"hmoga5NTp5Q",
+"60_CtgcZWQM",
+"Vs8lLk8RiNg",
+"ZcWsgqCH8bk", // cc 3
+"J_wwJskhJUM",
+"IwEPGddrL9M",
+"jEnW3F58S2E",
+"LlwsBTzImyw",
+"eY6Tp85pJ_A", // cc 4
+"b6BjM2FHkTk",
+"HeGAJYRRsRM",
+"jdIkqhwtTlg",
+"04hqL1PbHUM",
+"H-W3tIr7QAo", // cc 5
+"CGzIzTbVOds",
+"NpYRR1XkeJg",
+"Jp1h7gKC_s0",
+"ukNVXjOCvzY",
+"jQnJoFK0N7E", // cc 6
+"qZvZxIOcAl4",
+"fkW91JrBL74",
+"bf4DNA7tjNM",
+"ZsI71yl1uiQ",
+"UhzD9g4ogOA", // cc 7
+"5TQq-3QkpkU",
+"rc9e5hhGIxo",
+"svUjQIVNhI0",
+"EDBi2A_Mzo0",
+"eqWeCjXEbFg", // cc 8
+"WpEFNSFRMxQ",
+"aJo-vDd6OQs",
+"oovR5xjJmVY",
+"f87Vz2G8mM0",
+"nWMQ4RmlUrs", // cc 9
+"NWPfTuvJWcY",
+"w7C088xBxHw",
+"Do_sC_QHf8A",
+"TTgQFMIV1b8",
+"_uOEMgiLi6w", // cc 10
+"nW34dV1HDQs",
+"6sOLQ2NLRf4"
+];
+
+let player;
+let currentIndex = 0;
+let started = false;
+
+// Crear reproductor
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    height: '100%',
+    width: '100%',
+    videoId: VIDEOS[0],
+    playerVars: {
+      autoplay: 0,
+      controls: 1
+    },
+    events: {
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+// Cuando un video termina
+function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.ENDED) {
+    currentIndex++;
+    if (currentIndex < VIDEOS.length) {
+      player.loadVideoById(VIDEOS[currentIndex]);
+      actualizarContador();
+    } else {
+      alert("🎉 Lista terminada");
+      currentIndex = 0;
+      actualizarContador();
+    }
+  }
+}
+
+// Botón reproducir
+document.getElementById("playBtn").addEventListener("click", () => {
+  if (!started) {
+    player.playVideo();
+    started = true;
+    actualizarContador();
+  }
+});
+
+// Actualiza contador visual
+function actualizarContador(){
+  document.getElementById("info").innerText =
+    "Video: " + (currentIndex + 1) + " / " + VIDEOS.length;
+}
+
+</script>
+
+</body>  
+</html>
